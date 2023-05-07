@@ -1,8 +1,7 @@
-import fs from "fs";
+import { MatchReader } from "./MatchReader";
 
-const data = fs
-  .readFileSync("football.csv", { encoding: "utf-8" })
-  .split("\n")
-  .map((match: string): string[] => match.split(","));
+/* INHERITANCE */
 
-console.log(data);
+const data = new MatchReader("football.csv");
+data.read();
+console.log(data.data);
