@@ -1,6 +1,8 @@
 import { CsvFileReader } from "./CsvFileReader";
 import { MatchReader } from "./MatchReader";
-import { MatchResult } from "./MatchResult";
+import { Summary } from "./Summary";
+import { HtmlTarget } from "./targets/HtmlTarget";
+import { WinsAnalyzer } from "./analyzers/WinsAnalyzer";
 
 /* COMPOSITION */
 
@@ -12,14 +14,14 @@ const fileReader = new CsvFileReader("football.csv");
 const matchReader = new MatchReader(fileReader);
 matchReader.load();
 
-let manUnitedWins = 0;
+// Initiate with static method on Summary
+const summary = Summary.winsWithConsole("Man United");
+summary.buildAndPrintReport(matchReader.matches);
 
-for (let match of matchReader.matches) {
-  if (match[1] === "Man United" && match[5] === MatchResult.HomeWin) {
-    manUnitedWins++;
-  } else if (match[2] === "Man United" && match[5] === MatchResult.AwayWin) {
-    manUnitedWins++;
-  }
-}
+// Initiate from constructor
+const summaryFromConstructor = new Summary(
+  new WinsAnalyzer("Man United"),
+  new HtmlTarget("report.html")
+);
 
-console.log(`Man United won ${manUnitedWins} games`);
+summaryFromConstructor.buildAndPrintReport(matchReader.matches);
